@@ -10,7 +10,7 @@ $ wget https://raw.githubusercontent.com/tim124058/packetTools/master/pcapTool.p
 scapy :  
 
 ```
-$ sudo pip3 install scapy-http
+$ sudo pip3 install scapy-python3
 ```
 
 scapy-http :   
