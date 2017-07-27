@@ -4,6 +4,7 @@ import logging
 logging.getLogger("scapy.runtime").setLevel(logging.ERROR)
 from scapy.all import *
 from scapy_http.http import *
+import sys
 
 class packetTools():
     # 回傳所有ip
@@ -43,7 +44,7 @@ class packetTools():
         return sorted(ips ,key=lambda x:tuple(map(int,x.split("."))))
 
     @staticmethod
-    def ipCompare(l1,l2):
+    def Compare(l1,l2):
         return list(set(l1) & set(l2))
 
     @staticmethod
@@ -110,6 +111,9 @@ class Main():
                 metavar=("f1","f2"))
         parser.add_argument("--redirect", help="讀取pcap檔，並輸出所有HTTP redirect", type=argparse.FileType('r'), metavar="file")
         parser.add_argument("-o", help="輸出到檔案", type=argparse.FileType('w'), metavar="output_file")
+        if len(sys.argv) == 1:
+            parser.print_help()
+            sys.exit(0)
         self.args = parser.parse_args()
 
     # 以plaintext輸出所有IP
@@ -176,7 +180,7 @@ class Main():
         if self.args.ip_compare:
             ips1 = self.getFileIP(self.args.ip_compare[0])
             ips2 = self.getFileIP(self.args.ip_compare[1])
-            match = packetTools.ipCompare(ips1,ips2)
+            match = packetTools.Compare(ips1,ips2)
             match = packetTools.sortIP(match)
             if not match:
                 print("沒有一樣的ip!")
@@ -189,7 +193,7 @@ class Main():
         if self.args.dn_compare:
             dns1 = self.getFileDN(self.args.dn_compare[0])
             dns2 = self.getFileDN(self.args.dn_compare[1])
-            match = packetTools.ipCompare(dns1,dns2)
+            match = packetTools.Compare(dns1,dns2)
             if not match:
                 print("沒有一樣的domain name!")
             else:
